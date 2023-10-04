@@ -125,5 +125,5 @@ module.exports = {
     get_restaurant_list,
     update_restaurant,
     delete_restaurant,
-    update_status
+    update_status,
 }

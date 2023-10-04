@@ -6,6 +6,14 @@ const city_by_state = {
         state_name:Joi.string().required().trim()
     })
 }
+
+const res_type_and_city = {
+    body: Joi.object({
+        restaurant_type: Joi.string().required().trim(),
+        city_name: Joi.string().required().trim(),
+    })
+}
 module.exports = {
-    city_by_state
+    city_by_state,
+    res_type_and_city
 }

@@ -26,10 +26,10 @@ router.delete(
     "/delete-restaurant/:restaurantId",
     restaurant_Controller.delete_restaurant
 )
-//  Tag list
+//  Restaurant list
 router.get(
     "/list",
     restaurant_Controller.get_restaurant_list
 )
-
+// Exporting router
 module.exports = router;

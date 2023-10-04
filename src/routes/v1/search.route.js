@@ -32,5 +32,16 @@ router.get(
     "/restaurant-by-params-city-name/:cityName",
     search_Controller.restaurant_by_params_city_name
 )
-
+// Searches of restaurant by type and city
+router.post(
+    "/restaurant-by-type-and-city",
+    validate(search_Validation.res_type_and_city),
+    search_Controller.restaurant_by_type_and_city
+)
+// Get restaurant by id
+router.get(
+    "/restaurant-by-id/:restaurantId",
+    search_Controller.get_restaurant_by_id
+)
+// Exporting router
 module.exports = router;
