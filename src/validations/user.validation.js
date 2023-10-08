@@ -1,6 +1,5 @@
 const Joi = require("joi");
-
-/** create user */
+// create user
 const create_user = {
   body: Joi.object().keys({
     first_name: Joi.string().required().trim(),
@@ -10,16 +9,17 @@ const create_user = {
     address: Joi.string().required().trim(),
   }),
 };
-
-/** Send mail */
+// Send mail
 const send_mail = {
     body: Joi.object({
+      first_name: Joi.string().required().trim(),
+      last_name: Joi.string().required().trim(),
       email: Joi.string().required().trim().email(),
       subject: Joi.string().required().trim(),
-      text: Joi.string().required().trim(),
+      // text: Joi.string().required().trim(),
     }),
 }
-
+// Exporting validation object
 module.exports = {
   create_user,
   send_mail

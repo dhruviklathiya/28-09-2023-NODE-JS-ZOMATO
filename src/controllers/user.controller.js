@@ -1,6 +1,7 @@
 const { user_Service, email_Service } = require("../services");
-
-/* CREATE USER */
+const ejs = require("ejs")
+const path = require("path")
+// CREATE USER
 const create_user = async (req, res) => {
   try {
     const reqBody = req.body;
@@ -12,6 +13,26 @@ const create_user = async (req, res) => {
     if (!user) {
       throw new Error("Something went wrong -!- ");
     }
+    ejs.renderFile(
+      path.join(__dirname, "../views/otp-template.ejs"),
+      {
+        email: reqBody.email,
+        otp: ("0".repeat(4) + Math.floor(Math.random() * 10 ** 4)).slice(-4),
+        first_name: reqBody.first_name,
+        last_name: reqBody.last_name,
+      },
+      async (err, data) => {
+        if (err) {
+          let userCreated = await user_Service.get_user_by_email(reqBody.email);
+          if (userCreated) {
+            await user_Service.delete_user(reqBody.email);
+          }
+          throw new Error("Something went wrong, please try again.");
+        } else {
+          email_Service.send_mail(reqBody.email, data, "Verify Email");
+        }
+      }
+    );
     res.status(200).json({
       success: true,
       message: "User create successfully ^-^",
@@ -22,7 +43,7 @@ const create_user = async (req, res) => {
   }
 };
 
-/* USER LIST */
+// USER LIST
 const get_user_list = async (req, res) => {
   try {
     const userlist = await user_Service.get_user_list();
@@ -39,7 +60,7 @@ const get_user_list = async (req, res) => {
   }
 };
 
-/** Get user details by id */
+//* Get user details by id
 const getUserDetails = async (req, res) => {
   try {
     const getDetails = await user_Service.get_user_by_id(req.params.userId);
@@ -57,7 +78,7 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-/** user details update by id */
+//* user details update by id
 const updateDetails = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -77,7 +98,7 @@ const updateDetails = async (req, res) => {
   }
 };
 
-/* DELETE USER */
+// DELETE USER
 const delete_user = async (req, res) => {
   try {
     const user_id = req.params.userId;
@@ -97,7 +118,7 @@ const delete_user = async (req, res) => {
     });
   }
 };
-/* UPDATE USER */
+// UPDATE USER
 const update_user = async (req, res) => {
   try {
     const reqbody = req.body
@@ -119,7 +140,7 @@ const update_user = async (req, res) => {
   }
 };
 
-/** Send mail to reqested email */
+//* Send mail to reqested email
 const send_mail = async (req, res) => {
     try {
       const reqBody = req.body;
@@ -138,6 +159,7 @@ const send_mail = async (req, res) => {
       res.status(400).json({ success: false, message: error.message });
     }
   };
+// Exporting controller object
 module.exports = {
   create_user,
   get_user_list,
@@ -145,5 +167,5 @@ module.exports = {
   updateDetails,
   delete_user,
   update_user,
-  send_mail
+  send_mail,
 };
