@@ -1,6 +1,6 @@
 const { role_auth } = require("../middlewares/role_auth");
 const { order_Service,user_Service } = require("../services");
-
+// Create or place order controller
 const create_order = async(req,res) => {
     try {
         const token = req.headers.token
@@ -30,9 +30,11 @@ const create_order = async(req,res) => {
         });
     }
 }
-
+// Update order status
 const update_order = async(req,res) => {
     try {
+        const token = req.headers.token
+        await role_auth(token,["user"]);
         const order_exist = await order_Service.get_order_by_id(req.params.orderId);
         if(!order_exist){
             throw new Error("order does not exist -!-");
@@ -53,9 +55,11 @@ const update_order = async(req,res) => {
         });
     }
 }
-
+// Get. order list
 const get_order_list = async(req,res) => {
     try {
+        const token = req.headers.token
+        await role_auth(token,["owner"]);
         const order_list = await order_Service.get_order_list();
         if(!order_list){
             throw new Error("Order list does not exist -!-");
@@ -72,9 +76,11 @@ const get_order_list = async(req,res) => {
         });
     }
 }
-
+// Delete/Reject order
 const delete_order = async(req,res) => {
     try {
+        const token = req.headers.token
+        await role_auth(token,["owner"]);
         const order_exist = await order_Service.get_order_by_id(req.params.orderId)
         if(!order_exist){
             throw new Error("Order does not exist -!-");
@@ -94,7 +100,7 @@ const delete_order = async(req,res) => {
         });
     }
 }
-
+// Exporting controller object
 module.exports = {
     create_order,
     get_order_list,
