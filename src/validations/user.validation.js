@@ -7,6 +7,7 @@ const create_user = {
     email: Joi.string().required().trim(),
     password: Joi.string().required().trim(),
     address: Joi.string().required().trim(),
+    role:Joi.string().required().trim()
   }),
 };
 // Send mail

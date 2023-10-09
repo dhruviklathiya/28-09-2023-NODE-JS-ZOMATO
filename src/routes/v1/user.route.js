@@ -2,7 +2,7 @@ const express = require("express");
 const { user_Validation } = require("../../validations");
 const { user_Controller } = require("../../controllers");
 const validate = require("../../middlewares/validate");
-
+// Initializing express.Router() in router
 const router = express.Router();
 // Create user route
 router.post(

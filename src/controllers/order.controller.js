@@ -1,7 +1,10 @@
+const { role_auth } = require("../middlewares/role_auth");
 const { order_Service,user_Service } = require("../services");
 
 const create_order = async(req,res) => {
     try {
+        const token = req.headers.token
+        await role_auth(token,["user"]);
         const reqbody = req.body;
         const user_exist = await user_Service.get_user_by_id(reqbody.user);
         if(!user_exist){
@@ -17,7 +20,7 @@ const create_order = async(req,res) => {
         }
         res.status(200).json({
             success:true,
-            message:"Order created successfully ^-^ ",
+            message:"Order placed successfully ^-^ ",
             data:order
         });
     } catch (error) {
@@ -92,10 +95,9 @@ const delete_order = async(req,res) => {
     }
 }
 
-
 module.exports = {
     create_order,
     get_order_list,
     update_order,
-    delete_order
+    delete_order,
 }
